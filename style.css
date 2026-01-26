@@ -27,3 +27,16 @@ body {
         opacity: 1;
     }
 }
+
+.fade-out {
+    animation: fadeOut 2s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
