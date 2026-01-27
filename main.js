@@ -73,7 +73,6 @@ addEventListener('DOMContentLoaded', () => {
 });
 
 
-if (lampEnabled == true) {
     const darkness = document.getElementById('darkness');
     let active = false;
 
@@ -101,7 +100,6 @@ if (lampEnabled == true) {
             )
         `;
     }
-}
 
 
     // Souris
