@@ -147,6 +147,7 @@ addEventListener('DOMContentLoaded', () => {
                                 hoverTimer = setTimeout(() => {
                                     alert("Défaut 1/3 : Perfectionniste. Est-ce vraiment un défaut ?");
                                     alertShown = true;
+                                    document.querySelector('#scene img').src = 'assets/images/bureau.png';
                                 }, 500); // 500ms = 0.5 seconde
                             }
                         } else {
@@ -184,6 +185,7 @@ addEventListener('DOMContentLoaded', () => {
                             hoverTimer = setTimeout(() => {
                                 alert("Défaut 1/3 : Perfectionniste. Est-ce vraiment un défaut ?");
                                 alertShown = true;
+                                document.querySelector('#scene img').src = 'assets/images/bureau.png';
                             }, 500);
                         }
                     } else {
