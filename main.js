@@ -8,7 +8,7 @@ addEventListener('DOMContentLoaded', () => {
     main.style.justifyContent = 'center';
 
     const horrorSound = new Audio('assets/music/horror-ambient.mp3');
-    horrorSound.volume = 0.5;
+    horrorSound.volume = 0.3;
     horrorSound.loop = true; //Repeat the sound 
             
     const addIntro = (tag, text, delay, styles = {}) => {
@@ -40,7 +40,7 @@ addEventListener('DOMContentLoaded', () => {
 
             const consequence = new Audio('assets/music/consequence.mp3');
             consequence.play();
-            consequence.volume = 0.7;
+            consequence.volume = 0.5;
             const addText = (tag, text, delay, styles = {}) => {
                 setTimeout(() => {
                     const element2 = document.createElement(tag);
@@ -69,11 +69,11 @@ addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 lampEnabled = true; // 🔦 la lampe est maintenant autorisée
 
-                // Configuration du hotspot
+                // Configuration du hotspot 1
                 const hotspot = {
                     xPercent: 47.53,
                     yPercent: 70.01,
-                    radiusPercent: 5  // rayon de 5% de la largeur de l'écran
+                    radiusPercent: 7  // rayon de 5% de la largeur de l'écran
                 };
 
                 let hoverTimer = null;
@@ -87,6 +87,42 @@ addEventListener('DOMContentLoaded', () => {
                     
                     const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
                     return distance <= radius;
+                }
+
+                // Définir hotspot2
+                const hotspot2 = {
+                    xPercent: 63.89,
+                    yPercent: 77.62,
+                    radiusPercent: 7
+                };
+
+                let hoverTimer2 = null;
+                let alertShown2 = false;
+
+                function isInHotspot2(x, y) {
+                    const centerX2 = (window.innerWidth * hotspot2.xPercent) / 100;
+                    const centerY2 = (window.innerHeight * hotspot2.yPercent) / 100;
+                    const radius2 = (window.innerWidth * hotspot2.radiusPercent) / 100;
+                    const distance2 = Math.sqrt(Math.pow(x - centerX2, 2) + Math.pow(y - centerY2, 2));
+                    return distance2 <= radius2;
+                }
+
+                // Définir hotspot3
+                const hotspot3 = {
+                    xPercent: 50,  // À ajuster selon votre image bedroom
+                    yPercent: 50,  // À ajuster selon votre image bedroom
+                    radiusPercent: 7
+                };
+
+                let hoverTimer3 = null;
+                let alertShown3 = false;
+
+                function isInHotspot3(x, y) {
+                    const centerX3 = (window.innerWidth * hotspot3.xPercent) / 100;
+                    const centerY3 = (window.innerHeight * hotspot3.yPercent) / 100;
+                    const radius3 = (window.innerWidth * hotspot3.radiusPercent) / 100;
+                    const distance3 = Math.sqrt(Math.pow(x - centerX3, 2) + Math.pow(y - centerY3, 2));
+                    return distance3 <= radius3;
                 }
 
                 const darkness = document.getElementById('darkness');
@@ -139,7 +175,66 @@ addEventListener('DOMContentLoaded', () => {
                     if (active) {
                         e.preventDefault();
                         reveal(e.clientX, e.clientY);
+
+                        // Vérifier le hotspot 3 si on est au stage 3
+                        if (alertShown && alertShown2) {
+                            if (isInHotspot3(e.clientX, e.clientY)) {
+                                // Si pas de timer en cours, en démarrer un
+                                if (!hoverTimer3) {
+                                    hoverTimer3 = setTimeout(() => {
+                                        alert("Défaut 3/3 : Têtu. Ça ne se soigne pas ça ?");
+                                        alertShown3 = true;
+                                        document.querySelector('#scene img').src = 'assets/images/bedroom.png';
+                                    }, 500);
+                                }
+                            } else {
+                                // Si on quitte la zone du hotspot 3, annuler le timer
+                                if (hoverTimer3) {
+                                    clearTimeout(hoverTimer3);
+                                    hoverTimer3 = null;
+                                }
+                            }
+                        }  
                         
+                        // Vérifier le hotspot 2 si on est au stage 2
+                        if (alertShown && !alertShown2) {
+                            if (isInHotspot2(e.clientX, e.clientY)) {
+                                // Si pas de timer en cours, en démarrer un
+                                if (!hoverTimer2) {
+                                    hoverTimer2 = setTimeout(() => {
+                                        alert("Défaut 2/3 : Réservé. Après un combo bière/saucisson ça se soigne ?");
+                                        alertShown2 = true;
+                                        document.querySelector('#scene img').src = 'assets/images/bedroom.png';
+                                    }, 500);
+                                }
+                            } else {
+                                // Si on quitte la zone du hotspot 2, annuler le timer
+                                if (hoverTimer2) {
+                                    clearTimeout(hoverTimer2);
+                                    hoverTimer2 = null;
+                                }
+                            }
+                        }
+                        // Sinon vérifier le hotspot 1
+                        else if (!alertShown) {
+                            if (isInHotspot(e.clientX, e.clientY)) {
+                                // Si pas de timer en cours, en démarrer un
+                                if (!hoverTimer) {
+                                    hoverTimer = setTimeout(() => {
+                                        alert("Défaut 1/3 : Perfectionniste. Est-ce vraiment un défaut ?");
+                                        alertShown = true;
+                                        document.querySelector('#scene img').src = 'assets/images/bureau.png';
+                                    }, 500);
+                                } else {
+                                    // Si on quitte la zone, annuler le timer
+                                    if (hoverTimer) { 
+                                        clearTimeout(hoverTimer);
+                                        hoverTimer = null;
+                                    }
+                                } 
+                            }
+                        }
+
                         // Vérifier si on est dans la zone sensible
                         if (isInHotspot(e.clientX, e.clientY)) {
                             // Si pas de timer en cours, en démarrer un
@@ -194,9 +289,8 @@ addEventListener('DOMContentLoaded', () => {
                             hoverTimer = null;
                         }
                     }
-                });
-            }, 16000); // un peu après le fade-out
-
+                });            
+            }, 16000); // Fin du setTimeout principal
         }
     });
 });
@@ -212,9 +306,6 @@ function effetSonore() {
 };
 
 effetSonore(); // Appeler la fonction une première fois
-
-
-
 
 
 
