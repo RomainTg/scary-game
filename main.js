@@ -7,6 +7,8 @@ addEventListener('DOMContentLoaded', () => {
     main.style.alignItems = 'center';
     main.style.justifyContent = 'center';
 
+    const scream = new Audio('assets/music/scream.mp3');
+    scream.volume = 1;
     const horrorSound = new Audio('assets/music/horror-ambient.mp3');
     horrorSound.volume = 0.3;
     horrorSound.loop = true; //Repeat the sound 
@@ -73,7 +75,7 @@ addEventListener('DOMContentLoaded', () => {
                 const hotspot = {
                     xPercent: 47.53,
                     yPercent: 70.01,
-                    radiusPercent: 7  // rayon de 5% de la largeur de l'écran
+                    radiusPercent: 6  // rayon de 5% de la largeur de l'écran
                 };
 
                 let hoverTimer = null;
@@ -93,7 +95,7 @@ addEventListener('DOMContentLoaded', () => {
                 const hotspot2 = {
                     xPercent: 63.89,
                     yPercent: 77.62,
-                    radiusPercent: 7
+                    radiusPercent: 6
                 };
 
                 let hoverTimer2 = null;
@@ -109,9 +111,9 @@ addEventListener('DOMContentLoaded', () => {
 
                 // Définir hotspot3
                 const hotspot3 = {
-                    xPercent: 50,  // À ajuster selon votre image bedroom
-                    yPercent: 50,  // À ajuster selon votre image bedroom
-                    radiusPercent: 7
+                    xPercent: 25.45,  // À ajuster selon votre image bedroom
+                    yPercent: 35.45,  // À ajuster selon votre image bedroom
+                    radiusPercent: 6
                 };
 
                 let hoverTimer3 = null;
@@ -199,6 +201,7 @@ addEventListener('DOMContentLoaded', () => {
                         // Vérifier le hotspot 2 si on est au stage 2
                         if (alertShown && !alertShown2) {
                             if (isInHotspot2(e.clientX, e.clientY)) {
+                                scream.play();
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer2) {
                                     hoverTimer2 = setTimeout(() => {
@@ -295,17 +298,25 @@ addEventListener('DOMContentLoaded', () => {
     });
 });
 
+const bookfall = new Audio('assets/music/bookfall.mp3');
+    bookfall.volume = 1;
+const scream2 = new Audio('assets/music/scream2.mp3');
+    scream2.volume = 1;
+
 function effetSonore() {
     // Générer un délai aléatoire entre 0.5 et 1 minute (30000 à 60000 ms)
     const delay = 30000 + Math.random() * 30000;
     setTimeout(() => {
-        const bookfall = new Audio('assets/music/bookfall.mp3');
-        bookfall.volume = 1;
         bookfall.play();
+    setTimeout(() => {
+        scream2.play();
+        soundfadein(scream2, 1, 0, 1000); // Fondu en 1 seconde
+        soundfadeout(scream2, 1, 0, 3000); // Fondu en 3 secondes
+    }, 2000); // Délai de 1.5 secondes après le bookfall
     }, delay);
 };
 
-effetSonore(); // Appeler la fonction une première fois
+effetSonore(); // Appeler la fonction
 
 
 
