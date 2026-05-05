@@ -5,7 +5,7 @@ addEventListener('DOMContentLoaded', () => {
     main.style.display = 'flex';
     main.style.flexDirection = 'column';
     main.style.alignItems = 'center';
-    main.style.justifyContent = 'center';
+     main.style.justifyContent = 'center';
 
     const scream = new Audio('assets/music/scream.mp3');
     scream.volume = 1;
@@ -26,19 +26,32 @@ addEventListener('DOMContentLoaded', () => {
         }, delay);
     };
 
-    addIntro('h1', 'Welcome to the Scary Game!', 1000, { zIndex: '100' });
-    addIntro('p', 'For the best experience, turn up the volume. You can use headphones for optimal gameplay.', 3000, { zIndex: '100' });
-    addIntro('button', 'OK', 5000, { fontSize: '1.5em', color: 'black', padding: '5px', borderRadius: '8px', zIndex: '100' });
+    addIntro('h1', 'Bienvenue dans l\'horrible expérience de mes 3 plus gros défauts !', 1000, { zIndex: '100' });
+    addIntro('p', 'Ce jeu est exclusivement destiné aux utilisateurs d\' un ordinateur. Vous y trouverez mes 3 plus gros défauts. Aurez-vous le courage de les affronter ?', 1000, { zIndex: '100' });
+    addIntro('button', 'OK', 1000, { fontSize: '1.5em', color: 'black', padding: '5px', borderRadius: '8px', zIndex: '100' });
+    addIntro('a', 'Mentions légales & Confidentialité', 1000, { zIndex: '100', fontSize: '0.75em', color: '#aaa', cursor: 'pointer',
+    textDecoration: 'underline', position: 'absolute', bottom: '1em' });
+
+setTimeout(() => {
+    const link = main.querySelector('a');
+    if (link) link.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('legal-modal').style.display = 'block';
+    });
+}, 1100);
 
     addEventListener('click', (button) => {
-        horrorSound.play();
+        if (button.target.closest('#legal-modal')) return;
         if (button.target.tagName === 'BUTTON') {
+            horrorSound.play();
             const h1 = main.querySelector('h1');
             const p = main.querySelector('p');
             const btn = main.querySelector('button');
+            const link = main.querySelector('a');
             if (h1) h1.remove();
             if (p) p.remove();
             if (btn) btn.remove();
+            if (link) link.remove();
 
             const consequence = new Audio('assets/music/consequence.mp3');
             consequence.play();
@@ -73,28 +86,50 @@ addEventListener('DOMContentLoaded', () => {
 
                 // Configuration du hotspot 1
                 const hotspot = {
-                    xPercent: 47.53,
-                    yPercent: 70.01,
-                    radiusPercent: 6  // rayon de 5% de la largeur de l'écran
+                    xPercent: 76,
+                    yPercent: 70,
+                    radiusPercent: 6  // rayon de 6% de la largeur de l'écran
                 };
 
                 let hoverTimer = null;
                 let alertShown = false;
 
+                function getImageOffset() {
+                    const img = document.querySelector('#scene img');
+                    const screenW = window.innerWidth;
+                    const screenH = window.innerHeight;
+                    const imgRatio = img.naturalWidth / img.naturalHeight;
+                    const screenRatio = screenW / screenH;
+
+                    let renderedW, renderedH, offsetX, offsetY;
+
+                    if (screenRatio > imgRatio) {
+                        renderedW = screenW;
+                        renderedH = screenW / imgRatio;
+                        offsetX = 0;
+                        offsetY = (screenH - renderedH) / 2;
+                    } else {
+                        renderedH = screenH;
+                        renderedW = screenH * imgRatio;
+                        offsetX = (screenW - renderedW) / 2;
+                        offsetY = 0;
+                    }
+                    return { renderedW, renderedH, offsetX, offsetY };
+                }
+
                 // Fonction pour vérifier si le curseur est dans la zone
                 function isInHotspot(x, y) {
-                    const centerX = (window.innerWidth * hotspot.xPercent) / 100;
-                    const centerY = (window.innerHeight * hotspot.yPercent) / 100;
+                    const { renderedW, renderedH, offsetX, offsetY } = getImageOffset();
+                    const centerX = offsetX + (renderedW * hotspot.xPercent) / 100;
+                    const centerY = offsetY + (renderedH * hotspot.yPercent) / 100;
                     const radius = (window.innerWidth * hotspot.radiusPercent) / 100;
-                    
-                    const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-                    return distance <= radius;
+                    return Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)) <= radius;
                 }
 
                 // Définir hotspot2
                 const hotspot2 = {
-                    xPercent: 63.89,
-                    yPercent: 77.62,
+                    xPercent: 60,
+                    yPercent: 73.6,
                     radiusPercent: 6
                 };
 
@@ -102,17 +137,17 @@ addEventListener('DOMContentLoaded', () => {
                 let alertShown2 = false;
 
                 function isInHotspot2(x, y) {
-                    const centerX2 = (window.innerWidth * hotspot2.xPercent) / 100;
-                    const centerY2 = (window.innerHeight * hotspot2.yPercent) / 100;
-                    const radius2 = (window.innerWidth * hotspot2.radiusPercent) / 100;
-                    const distance2 = Math.sqrt(Math.pow(x - centerX2, 2) + Math.pow(y - centerY2, 2));
-                    return distance2 <= radius2;
+                    const { renderedW, renderedH, offsetX, offsetY } = getImageOffset();
+                    const centerX = offsetX + (renderedW * hotspot2.xPercent) / 100;
+                    const centerY = offsetY + (renderedH * hotspot2.yPercent) / 100;
+                    const radius = (window.innerWidth * hotspot2.radiusPercent) / 100;
+                    return Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)) <= radius;
                 }
 
                 // Définir hotspot3
                 const hotspot3 = {
-                    xPercent: 25.45,  // À ajuster selon votre image bedroom
-                    yPercent: 35.45,  // À ajuster selon votre image bedroom
+                    xPercent: 29.6, 
+                    yPercent: 41.45,  
                     radiusPercent: 6
                 };
 
@@ -120,11 +155,11 @@ addEventListener('DOMContentLoaded', () => {
                 let alertShown3 = false;
 
                 function isInHotspot3(x, y) {
-                    const centerX3 = (window.innerWidth * hotspot3.xPercent) / 100;
-                    const centerY3 = (window.innerHeight * hotspot3.yPercent) / 100;
-                    const radius3 = (window.innerWidth * hotspot3.radiusPercent) / 100;
-                    const distance3 = Math.sqrt(Math.pow(x - centerX3, 2) + Math.pow(y - centerY3, 2));
-                    return distance3 <= radius3;
+                    const { renderedW, renderedH, offsetX, offsetY } = getImageOffset();
+                    const centerX = offsetX + (renderedW * hotspot3.xPercent) / 100;
+                    const centerY = offsetY + (renderedH * hotspot3.yPercent) / 100;
+                    const radius = (window.innerWidth * hotspot3.radiusPercent) / 100;
+                    return Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)) <= radius;
                 }
 
                 const darkness = document.getElementById('darkness');
@@ -157,12 +192,15 @@ addEventListener('DOMContentLoaded', () => {
 
                 // Souris
                 document.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('#legal-modal')) return;
+                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
                     e.preventDefault();
                     active = true;
                     reveal(e.clientX, e.clientY);
                 });
 
-                document.addEventListener('mouseup', () => {
+                document.addEventListener('mouseup', (e) => {
+                    if (e.target.closest('#legal-modal')) return;
                     active = false;
                     darkness.style.background = 'black';
                     
@@ -205,7 +243,7 @@ addEventListener('DOMContentLoaded', () => {
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer2) {
                                     hoverTimer2 = setTimeout(() => {
-                                        alert("Défaut 2/3 : Réservé. Après un combo bière/saucisson ça se soigne ?");
+                                        alert("Défaut 2/3 : Réservé. Après un combo bière/saucisson ça va tout de suite mieux !");
                                         alertShown2 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
                                     }, 500);
