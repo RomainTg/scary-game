@@ -21,6 +21,13 @@ addEventListener('DOMContentLoaded', () => {
     laugh.volume = 1;
     const pain = new Audio('assets/music/pain.mp3');
     pain.volume = 1;
+    const jumpscare = new Audio('assets/music/jump1.mp3');
+    jumpscare.volume = 1;
+
+    const allSounds = [scream, horrorSound, bookfall, scream2, cry, laugh, pain, jumpscare];
+    function muteAllSounds() {
+        allSounds.forEach(s => { s.pause(); s.currentTime = 0; });
+    }
 
     horrorSound.loop = true; //Repeat the sound 
             
@@ -38,8 +45,12 @@ addEventListener('DOMContentLoaded', () => {
         }, delay);
     };
 
-    addIntro('h1', 'Bienvenue dans l\'horrible expérience de mes 3 plus gros défauts !', 1000, { zIndex: '100' });
-    addIntro('p', 'Ce jeu est exclusivement jouable sur ordinateur. Vous y trouverez mes 3 plus gros défauts, pour les trouver il vous suffit de pointer les zones sensibles à l\'écran à l\'aide de votre souris. Aurez-vous le courage de les affronter ?', 1000, { zIndex: '100' });
+    addIntro('h1', 'Bienvenue dans l\'horrible expérience des plus gros défauts !', 1000, { textTransform: 'uppercase', zIndex: '100' });
+    addIntro('p', 'ATTENTION ce jeu est exclusivement jouable sur ordinateur. Vous y trouverez mes plus gros défauts !', 1000, { zIndex: '100' });
+    addIntro('p', 'Pour cela, rien de plus facile ! Il vous faudra simplement maintenir le clic gauche de votre souris pour activer la lampe.', 1000, { zIndex: '100' });
+    addIntro('p', 'Une fois activée, la lampe vous permettra de révéler mes défauts en les pointant avec celle-ci.', 1000, { zIndex: '100' });
+    addIntro('p', 'Aurez-vous le courage de les affronter ?', 1000, { zIndex: '100' });
+    addIntro('p', '(Pour une expérience optimale, veuillez utiliser un casque audio et augmenter le volume.)', 1000, { fontStyle: 'italic', color: '#ff0000', zIndex: '100' });
     addIntro('button', 'OK', 1000, { fontSize: '1.5em', color: 'black', padding: '5px', borderRadius: '8px', zIndex: '100' });
     addIntro('a', 'Mentions légales & Confidentialité', 1000, { zIndex: '100', fontSize: '0.75em', color: '#aaa', cursor: 'pointer',
     textDecoration: 'underline', position: 'absolute', bottom: '1em' });
@@ -58,11 +69,11 @@ setTimeout(() => {
             horrorSound.play();
             effetSonore();
             const h1 = main.querySelector('h1');
-            const p = main.querySelector('p');
+            const p = main.querySelectorAll('p');
             const btn = main.querySelector('button');
             const link = main.querySelector('a');
             if (h1) h1.remove();
-            if (p) p.remove();
+            if (p) p.forEach((element) => element.remove());
             if (btn) btn.remove();
             if (link) link.remove();
 
@@ -82,17 +93,11 @@ setTimeout(() => {
                 }, delay);
             };
 
-            addText('h2', 'Ready?', 500, { zIndex: '100' });
+            addText('h2', 'Prêt ?', 500, { fontSize: '3.5em', zIndex: '100' });
             setTimeout(() => {
                 const h2 = main.querySelector('h2');
                 if (h2) h2.classList.add('fade-out');
-            }, 9500);
-
-            addText('p', 'Or not...', 10000, { zIndex: '100' });
-            setTimeout(() => {
-                const here = main.querySelector('p');
-                if (here) here.classList.add('fade-out');
-            }, 14500);
+            }, 9000);
 
             setTimeout(() => {
                 lampEnabled = true; // 🔦 la lampe est maintenant autorisée
@@ -233,15 +238,16 @@ setTimeout(() => {
                         // Vérifier le hotspot 3 si on est au stage 3
                         if (alertShown && alertShown2) {
                             if (isInHotspot3(e.clientX, e.clientY)) {
-                                laugh.play();
+                                jumpscare.play();
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer3) {
                                     hoverTimer3 = setTimeout(() => {
                                         showDefect(
-                                            "Défaut 3/3 : Têtu.", " Ça ne se soigne pas ça ?",
+                                            "Défaut 3/3 : Obstiné", " Ça ne se soigne pas ça ?",
                                         );
                                         alertShown3 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
+                                        setTimeout(() => showGameOver(), 4000);
                                     }, 500);
                                 }
                             } else {
@@ -256,13 +262,13 @@ setTimeout(() => {
                         // Vérifier le hotspot 2 si on est au stage 2
                         if (alertShown && !alertShown2) {
                             if (isInHotspot2(e.clientX, e.clientY)) {
-                                scream.play();
+                                jumpscare.play();
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer2) {
                                     hoverTimer2 = setTimeout(() => {
                                         showDefect(
-                                            "Défaut 2/3 : Réservé.",
-                                            "Après un combo bière/saucisson ça va tout de suite mieux !"
+                                            "Défaut 2/3 : Timidité",
+                                            "Après un combo bière/saucisson, ça va tout de suite mieux !"
                                         );
                                         alertShown2 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
@@ -279,13 +285,17 @@ setTimeout(() => {
                         // Sinon vérifier le hotspot 1
                         else if (!alertShown) {
                             if (isInHotspot(e.clientX, e.clientY)) {
-                                cry.play();
+                                cry.play( setTimeout(() => {
+                                    soundfadein(cry, 1, 0, 1000); // Fondu en 1 seconde
+                                    soundfadeout(cry, 1, 0, 3000); // Fondu en 3 secondes
+                                }));
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer) {
                                     hoverTimer = setTimeout(() => {
+                                        jumpscare.play();
                                         showDefect(
                                             "Défaut 1/3 : Perfectionniste",
-                                            "Est-ce vraiment un défaut ?"
+                                            "Est-ce vraiment un défaut finalement ?"
                                         );
                                         alertShown = true;
                                         document.querySelector('#scene img').src = 'assets/images/bureau.png';
@@ -333,9 +343,8 @@ function showDefect(title, description) {
     const h1 = document.createElement('h1');
     h1.textContent = title;
     h1.style.color = 'red';
-    h1.style.fontSize = '3em';
+    h1.style.fontSize = '5em';
     h1.style.marginBottom = '0.5em';
-    h1.style.transform = 'uppercase';
 
     const p = document.createElement('p');
     p.textContent = description;
@@ -348,7 +357,6 @@ function showDefect(title, description) {
 
     // animation
     container.style.opacity = '0';
-    container.style.transition = 'opacity 1s ease';
 
     requestAnimationFrame(() => {
         container.style.opacity = '1';
@@ -358,8 +366,53 @@ function showDefect(title, description) {
     setTimeout(() => {
         container.style.opacity = '0';
         setTimeout(() => container.remove(), 1000);
-    }, 4000);
+    }, 3000);
 }
+
+function showGameOver() {
+    lampEnabled = false; // Désactiver la lampe pour éviter les interactions pendant le game over
+    muteAllSounds();
+    const container = document.createElement('div');
+ 
+    container.style.position = 'fixed';
+    container.style.top = '50%';
+    container.style.left = '50%';
+    container.style.transform = 'translate(-50%, -50%)';
+    container.style.textAlign = 'center';
+    container.style.zIndex = '9999';
+    container.style.pointerEvents = 'none';
+    container.style.opacity = '0';
+    container.style.transition = 'opacity 2s ease';
+ 
+    const h1 = document.createElement('h1');
+    h1.textContent = 'GAME OVER';
+    h1.style.color = 'red';
+    h1.style.fontSize = '5em';
+    h1.style.marginBottom = '0.5em';
+    h1.style.letterSpacing = '0.1em';
+ 
+    const p1 = document.createElement('p');
+    p1.textContent = 'Vous avez survécu à mes pires défauts.';
+    p1.style.color = 'white';
+    p1.style.fontSize = '1.5em';
+    p1.style.marginBottom = '0.5em';
+ 
+    const p2 = document.createElement('p');
+    p2.textContent = 'Merci d\'avoir joué — et d\'avoir eu le courage d\'aller jusqu\'au bout !';
+    p2.style.color = '#ccc';
+    p2.style.fontSize = '1.1em';
+    p2.style.fontStyle = 'italic';
+ 
+    container.appendChild(h1);
+    container.appendChild(p1);
+    container.appendChild(p2);
+    document.body.appendChild(container);
+ 
+    requestAnimationFrame(() => {
+        container.style.opacity = '1';
+    });
+}
+
 
 
 /*document.addEventListener('click', (e) => {
