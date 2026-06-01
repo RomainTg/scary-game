@@ -5,12 +5,23 @@ addEventListener('DOMContentLoaded', () => {
     main.style.display = 'flex';
     main.style.flexDirection = 'column';
     main.style.alignItems = 'center';
-     main.style.justifyContent = 'center';
+    main.style.justifyContent = 'center';
 
     const scream = new Audio('assets/music/scream.mp3');
     scream.volume = 1;
     const horrorSound = new Audio('assets/music/horror-ambient.mp3');
     horrorSound.volume = 0.3;
+    const bookfall = new Audio('assets/music/bookfall.mp3');
+    bookfall.volume = 1;
+    const scream2 = new Audio('assets/music/scream2.mp3');
+    scream2.volume = 1;
+    const cry = new Audio('assets/music/womanCry.mp3');
+    cry.volume = 0.7;
+    const laugh = new Audio('assets/music/laugh.mp3');
+    laugh.volume = 1;
+    const pain = new Audio('assets/music/pain.mp3');
+    pain.volume = 1;
+
     horrorSound.loop = true; //Repeat the sound 
             
     const addIntro = (tag, text, delay, styles = {}) => {
@@ -20,6 +31,7 @@ addEventListener('DOMContentLoaded', () => {
             element.style.color = 'white';
             element.style.textAlign = 'center';
             element.style.marginTop = '1em';
+            element.style.padding = '0 3em';
             Object.assign(element.style, styles);
             element.textContent = text;
             main.appendChild(element);
@@ -27,7 +39,7 @@ addEventListener('DOMContentLoaded', () => {
     };
 
     addIntro('h1', 'Bienvenue dans l\'horrible expérience de mes 3 plus gros défauts !', 1000, { zIndex: '100' });
-    addIntro('p', 'Ce jeu est exclusivement destiné aux utilisateurs d\' un ordinateur. Vous y trouverez mes 3 plus gros défauts. Aurez-vous le courage de les affronter ?', 1000, { zIndex: '100' });
+    addIntro('p', 'Ce jeu est exclusivement jouable sur ordinateur. Vous y trouverez mes 3 plus gros défauts, pour les trouver il vous suffit de pointer les zones sensibles à l\'écran à l\'aide de votre souris. Aurez-vous le courage de les affronter ?', 1000, { zIndex: '100' });
     addIntro('button', 'OK', 1000, { fontSize: '1.5em', color: 'black', padding: '5px', borderRadius: '8px', zIndex: '100' });
     addIntro('a', 'Mentions légales & Confidentialité', 1000, { zIndex: '100', fontSize: '0.75em', color: '#aaa', cursor: 'pointer',
     textDecoration: 'underline', position: 'absolute', bottom: '1em' });
@@ -44,6 +56,7 @@ setTimeout(() => {
         if (button.target.closest('#legal-modal')) return;
         if (button.target.tagName === 'BUTTON') {
             horrorSound.play();
+            effetSonore();
             const h1 = main.querySelector('h1');
             const p = main.querySelector('p');
             const btn = main.querySelector('button');
@@ -88,7 +101,7 @@ setTimeout(() => {
                 const hotspot = {
                     xPercent: 76,
                     yPercent: 70,
-                    radiusPercent: 6  // rayon de 6% de la largeur de l'écran
+                    radiusPercent: 7  // rayon de 7% de la largeur de l'écran
                 };
 
                 let hoverTimer = null;
@@ -130,7 +143,7 @@ setTimeout(() => {
                 const hotspot2 = {
                     xPercent: 60,
                     yPercent: 73.6,
-                    radiusPercent: 6
+                    radiusPercent: 7
                 };
 
                 let hoverTimer2 = null;
@@ -148,7 +161,7 @@ setTimeout(() => {
                 const hotspot3 = {
                     xPercent: 29.6, 
                     yPercent: 41.45,  
-                    radiusPercent: 6
+                    radiusPercent: 7
                 };
 
                 let hoverTimer3 = null;
@@ -194,6 +207,7 @@ setTimeout(() => {
                 document.addEventListener('mousedown', (e) => {
                     if (e.target.closest('#legal-modal')) return;
                     if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+                    if (!lampEnabled) return;
                     e.preventDefault();
                     active = true;
                     reveal(e.clientX, e.clientY);
@@ -219,10 +233,13 @@ setTimeout(() => {
                         // Vérifier le hotspot 3 si on est au stage 3
                         if (alertShown && alertShown2) {
                             if (isInHotspot3(e.clientX, e.clientY)) {
+                                laugh.play();
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer3) {
                                     hoverTimer3 = setTimeout(() => {
-                                        alert("Défaut 3/3 : Têtu. Ça ne se soigne pas ça ?");
+                                        showDefect(
+                                            "Défaut 3/3 : Têtu.", " Ça ne se soigne pas ça ?",
+                                        );
                                         alertShown3 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
                                     }, 500);
@@ -243,7 +260,10 @@ setTimeout(() => {
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer2) {
                                     hoverTimer2 = setTimeout(() => {
-                                        alert("Défaut 2/3 : Réservé. Après un combo bière/saucisson ça va tout de suite mieux !");
+                                        showDefect(
+                                            "Défaut 2/3 : Réservé.",
+                                            "Après un combo bière/saucisson ça va tout de suite mieux !"
+                                        );
                                         alertShown2 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
                                     }, 500);
@@ -259,10 +279,14 @@ setTimeout(() => {
                         // Sinon vérifier le hotspot 1
                         else if (!alertShown) {
                             if (isInHotspot(e.clientX, e.clientY)) {
+                                cry.play();
                                 // Si pas de timer en cours, en démarrer un
                                 if (!hoverTimer) {
                                     hoverTimer = setTimeout(() => {
-                                        alert("Défaut 1/3 : Perfectionniste. Est-ce vraiment un défaut ?");
+                                        showDefect(
+                                            "Défaut 1/3 : Perfectionniste",
+                                            "Est-ce vraiment un défaut ?"
+                                        );
                                         alertShown = true;
                                         document.querySelector('#scene img').src = 'assets/images/bureau.png';
                                     }, 500);
@@ -275,71 +299,12 @@ setTimeout(() => {
                                 } 
                             }
                         }
-
-                        // Vérifier si on est dans la zone sensible
-                        if (isInHotspot(e.clientX, e.clientY)) {
-                            // Si pas de timer en cours, en démarrer un
-                            if (!hoverTimer && !alertShown) {
-                                hoverTimer = setTimeout(() => {
-                                    alert("Défaut 1/3 : Perfectionniste. Est-ce vraiment un défaut ?");
-                                    alertShown = true;
-                                    document.querySelector('#scene img').src = 'assets/images/bureau.png';
-                                }, 500); // 500ms = 0.5 seconde
-                            }
-                        } else {
-                            // Si on quitte la zone, annuler le timer
-                            if (hoverTimer) {
-                                clearTimeout(hoverTimer);
-                                hoverTimer = null;
-                            }
-                        }
                     }
-                });
-
-                // Tactile
-                document.addEventListener('touchstart', () => active = true);
-                
-                document.addEventListener('touchend', () => {
-                    active = false;
-                    darkness.style.background = 'black';
-                    
-                    // Annuler le timer si on relâche le doigt
-                    if (hoverTimer) {
-                        clearTimeout(hoverTimer);
-                        hoverTimer = null;
-                    }
-                });
-
-                document.addEventListener('touchmove', e => {
-                    if (!active) return;
-                    const touch = e.touches[0];
-                    reveal(touch.clientX, touch.clientY);
-                    
-                    // Vérifier si on est dans la zone sensible (tactile)
-                    if (isInHotspot(touch.clientX, touch.clientY)) {
-                        if (!hoverTimer && !alertShown) {
-                            hoverTimer = setTimeout(() => {
-                                alert("Défaut 1/3 : Perfectionniste. Est-ce vraiment un défaut ?");
-                                alertShown = true;
-                                document.querySelector('#scene img').src = 'assets/images/bureau.png';
-                            }, 500);
-                        }
-                    } else {
-                        if (hoverTimer) {
-                            clearTimeout(hoverTimer);
-                            hoverTimer = null;
-                        }
-                    }
-                });            
+                });       
             }, 16000); // Fin du setTimeout principal
         }
     });
 });
-
-const bookfall = new Audio('assets/music/bookfall.mp3');
-    bookfall.volume = 1;
-const scream2 = new Audio('assets/music/scream2.mp3');
-    scream2.volume = 1;
 
 function effetSonore() {
     // Générer un délai aléatoire entre 0.5 et 1 minute (30000 à 60000 ms)
@@ -354,9 +319,47 @@ function effetSonore() {
     }, delay);
 };
 
-effetSonore(); // Appeler la fonction
+function showDefect(title, description) {
+    const container = document.createElement('div');
 
+    container.style.position = 'fixed';
+    container.style.top = '50%';
+    container.style.left = '50%';
+    container.style.transform = 'translate(-50%, -50%)';
+    container.style.textAlign = 'center';
+    container.style.zIndex = '9999';
+    container.style.pointerEvents = 'none';
 
+    const h1 = document.createElement('h1');
+    h1.textContent = title;
+    h1.style.color = 'red';
+    h1.style.fontSize = '3em';
+    h1.style.marginBottom = '0.5em';
+    h1.style.transform = 'uppercase';
+
+    const p = document.createElement('p');
+    p.textContent = description;
+    p.style.color = 'white';
+    p.style.fontSize = '1.5em';
+
+    container.appendChild(h1);
+    container.appendChild(p);
+    document.body.appendChild(container);
+
+    // animation
+    container.style.opacity = '0';
+    container.style.transition = 'opacity 1s ease';
+
+    requestAnimationFrame(() => {
+        container.style.opacity = '1';
+    });
+
+    // fade out après 4s
+    setTimeout(() => {
+        container.style.opacity = '0';
+        setTimeout(() => container.remove(), 1000);
+    }, 4000);
+}
 
 
 /*document.addEventListener('click', (e) => {
