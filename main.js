@@ -1,4 +1,5 @@
 let lampEnabled = false; // Variable pour contrôler l'activation de la lampe
+let AllSounds = []; // Tableau pour stocker tous les sons
 
 addEventListener('DOMContentLoaded', () => {
     const main = document.querySelector('main');
@@ -24,10 +25,7 @@ addEventListener('DOMContentLoaded', () => {
     const jumpscare = new Audio('assets/music/jump1.mp3');
     jumpscare.volume = 1;
 
-    const allSounds = [scream, horrorSound, bookfall, scream2, cry, laugh, pain, jumpscare];
-    function muteAllSounds() {
-        allSounds.forEach(s => { s.pause(); s.currentTime = 0; });
-    }
+    allSounds = [scream, horrorSound, bookfall, scream2, cry, laugh, pain, jumpscare];
 
     horrorSound.loop = true; //Repeat the sound 
             
@@ -45,12 +43,12 @@ addEventListener('DOMContentLoaded', () => {
         }, delay);
     };
 
-    addIntro('h1', 'Bienvenue dans l\'horrible expérience des plus gros défauts !', 1000, { textTransform: 'uppercase', zIndex: '100' });
-    addIntro('p', 'ATTENTION ce jeu est exclusivement jouable sur ordinateur. Vous y trouverez mes plus gros défauts !', 1000, { zIndex: '100' });
+    addIntro('h1', 'Bienvenue dans l\'horrible expérience !', 1000, { textTransform: 'uppercase', zIndex: '100' });
+    addIntro('p', 'ATTENTION ce jeu est exclusivement jouable sur ordinateur. Vous y trouverez mes 3 plus gros défauts !', 1000, { zIndex: '100' });
     addIntro('p', 'Pour cela, rien de plus facile ! Il vous faudra simplement maintenir le clic gauche de votre souris pour activer la lampe.', 1000, { zIndex: '100' });
-    addIntro('p', 'Une fois activée, la lampe vous permettra de révéler mes défauts en les pointant avec celle-ci.', 1000, { zIndex: '100' });
+    addIntro('p', 'Une fois celle-ci activée, la lampe vous permettra ratisser l\'espace et de révéler mes défauts en les pointant un petit moment.', 1000, { zIndex: '100' });
     addIntro('p', 'Aurez-vous le courage de les affronter ?', 1000, { zIndex: '100' });
-    addIntro('p', '(Pour une expérience optimale, veuillez utiliser un casque audio et augmenter le volume.)', 1000, { fontStyle: 'italic', color: '#ff0000', zIndex: '100' });
+    addIntro('p', '(Pour une expérience optimale, vous pouvez utiliser un casque audio et/ou augmenter le volume.)', 1000, { fontStyle: 'italic', color: '#ff0000', zIndex: '100' });
     addIntro('button', 'OK', 1000, { fontSize: '1.5em', color: 'black', padding: '5px', borderRadius: '8px', zIndex: '100' });
     addIntro('a', 'Mentions légales & Confidentialité', 1000, { zIndex: '100', fontSize: '0.75em', color: '#aaa', cursor: 'pointer',
     textDecoration: 'underline', position: 'absolute', bottom: '1em' });
@@ -97,7 +95,7 @@ setTimeout(() => {
             setTimeout(() => {
                 const h2 = main.querySelector('h2');
                 if (h2) h2.classList.add('fade-out');
-            }, 9000);
+            }, 8000);
 
             setTimeout(() => {
                 lampEnabled = true; // 🔦 la lampe est maintenant autorisée
@@ -366,7 +364,11 @@ function showDefect(title, description) {
     setTimeout(() => {
         container.style.opacity = '0';
         setTimeout(() => container.remove(), 1000);
-    }, 3000);
+    }, 4000);
+}
+
+function muteAllSounds() {
+        allSounds.forEach(s => { s.pause(); s.currentTime = 0; });
 }
 
 function showGameOver() {
