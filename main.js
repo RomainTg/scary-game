@@ -1,7 +1,28 @@
 let lampEnabled = false; // Variable pour contrôler l'activation de la lampe
 let AllSounds = []; // Tableau pour stocker tous les sons
 
+function isScreenTooSmall() {
+    return window.innerWidth < 1024; // seuil à ajuster selon tes besoins
+}
+
+function showUnsupportedMessage() {
+    document.body.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:center; height:100vh; background:#000; color:white; text-align:center; padding:2em; font-family:sans-serif;">
+            <div>
+                <h1 style="margin-bottom:0.5em;"> Expérience non disponible</h1>
+                <p>Ce jeu n'est accessible que sur ordinateur.<br>Merci de revenir avec un écran plus grand !</p>
+            </div>
+        </div>
+    `;
+}
+
 addEventListener('DOMContentLoaded', () => {
+
+    if (isScreenTooSmall()) {
+        showUnsupportedMessage();
+        return; // on stoppe tout le reste (sons, hotspots, etc.)
+    }
+
     const main = document.querySelector('main');
     main.style.display = 'flex';
     main.style.flexDirection = 'column';
@@ -66,6 +87,7 @@ setTimeout(() => {
         if (button.target.tagName === 'BUTTON') {
             horrorSound.play();
             effetSonore();
+            darkness.style.opacity = '0.95';
             const h1 = main.querySelector('h1');
             const p = main.querySelectorAll('p');
             const btn = main.querySelector('button');
@@ -400,7 +422,7 @@ function showGameOver() {
     p1.style.marginBottom = '0.5em';
  
     const p2 = document.createElement('p');
-    p2.textContent = 'Merci d\'avoir joué — et d\'avoir eu le courage d\'aller jusqu\'au bout !';
+    p2.textContent = 'Merci d\'avoir joué et d\'avoir eu le courage d\'aller jusqu\'au bout !';
     p2.style.color = '#ccc';
     p2.style.fontSize = '1.1em';
     p2.style.fontStyle = 'italic';

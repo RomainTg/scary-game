@@ -45,6 +45,7 @@ main {
     position: absolute;
     inset: 0;
     background: black;
+    opacity: 1;
     pointer-events: none;
     z-index: 5;
 }
