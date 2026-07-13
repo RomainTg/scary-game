@@ -124,8 +124,8 @@ setTimeout(() => {
 
                 // Configuration du hotspot 1
                 const hotspot = {
-                    xPercent: 76,
-                    yPercent: 70,
+                    xPercent: 74.58,
+                    yPercent: 75.85,
                     radiusPercent: 7  // rayon de 7% de la largeur de l'écran
                 };
 
@@ -166,8 +166,8 @@ setTimeout(() => {
 
                 // Définir hotspot2
                 const hotspot2 = {
-                    xPercent: 60,
-                    yPercent: 73.6,
+                    xPercent: 57,
+                    yPercent: 75.8,
                     radiusPercent: 7
                 };
 
@@ -222,7 +222,7 @@ setTimeout(() => {
                         radial-gradient(
                             circle 120px at ${x}px ${y}px,
                             transparent 0%,
-                            rgba(0,0,0,0.9) 60%,
+                            rgba(3, 3, 3, 0.81) 75%,
                             black 100%
                         )
                     `;
@@ -439,7 +439,7 @@ function showGameOver() {
 
 
 
-/*document.addEventListener('click', (e) => {
+document.addEventListener('click', (e) => {
     const xPercent = (e.clientX / window.innerWidth) * 100;
     const yPercent = (e.clientY / window.innerHeight) * 100;
     
@@ -456,4 +456,4 @@ function showGameOver() {
     marker.style.borderRadius = '50%';
     marker.style.zIndex = '9999';
     document.body.appendChild(marker);
-});*/
+});
