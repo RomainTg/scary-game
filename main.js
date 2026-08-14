@@ -120,7 +120,7 @@ setTimeout(() => {
             }, 8000);
 
             setTimeout(() => {
-                lampEnabled = true; // 🔦 la lampe est maintenant autorisée
+                lampEnabled = true; // la lampe est maintenant autorisée
 
                 // Configuration du hotspot 1
                 const hotspot = {
@@ -220,9 +220,9 @@ setTimeout(() => {
                 function reveal(x, y) {
                     darkness.style.background = `
                         radial-gradient(
-                            circle 120px at ${x}px ${y}px,
+                            circle 150px at ${x}px ${y}px,
                             transparent 0%,
-                            rgba(3, 3, 3, 0.81) 75%,
+                            rgba(3, 3, 3, 0.61) 70%,
                             black 100%
                         )
                     `;
