@@ -268,7 +268,7 @@ setTimeout(() => {
                                         alertShown3 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
                                         setTimeout(() => showGameOver(), 4000);
-                                    }, 500);
+                                    }, 1500);
                                 }
                             } else {
                                 // Si on quitte la zone du hotspot 3, annuler le timer
@@ -292,7 +292,7 @@ setTimeout(() => {
                                         );
                                         alertShown2 = true;
                                         document.querySelector('#scene img').src = 'assets/images/bedroom.png';
-                                    }, 500);
+                                    }, 1500);
                                 }
                             } else {
                                 // Si on quitte la zone du hotspot 2, annuler le timer
@@ -319,7 +319,7 @@ setTimeout(() => {
                                         );
                                         alertShown = true;
                                         document.querySelector('#scene img').src = 'assets/images/bureau.png';
-                                    }, 500);
+                                    }, 1500);
                                 } else {
                                     // Si on quitte la zone, annuler le timer
                                     if (hoverTimer) { 
@@ -439,7 +439,7 @@ function showGameOver() {
 
 
 
-document.addEventListener('click', (e) => {
+/*document.addEventListener('click', (e) => {
     const xPercent = (e.clientX / window.innerWidth) * 100;
     const yPercent = (e.clientY / window.innerHeight) * 100;
     
@@ -456,4 +456,4 @@ document.addEventListener('click', (e) => {
     marker.style.borderRadius = '50%';
     marker.style.zIndex = '9999';
     document.body.appendChild(marker);
-});
+});*/
